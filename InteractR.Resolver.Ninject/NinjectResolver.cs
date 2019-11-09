@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using InteractorHub.Notification;
-using InteractorHub.Pipeline;
-using InteractorHub.Resolver;
+using InteractR.Interactor;
+using InteractR.Resolver;
 using Ninject;
 
 namespace InteractorHub.Resolvers.Ninject
@@ -14,16 +13,15 @@ namespace InteractorHub.Resolvers.Ninject
         public NinjectResolver(IKernel kernel)
         {
             _kernel = kernel;
-        } 
-
-        public TInteractor ResolveInteractor<TInteractor>() => Resolve<TInteractor>();
-
-        public object ResolveInteractor(Type interactorType) => Resolve(interactorType);
+        }
 
         private T Resolve<T>() =>  _kernel.Get<T>();
 
         private object Resolve(Type t) => _kernel.Get(t);
 
-        private IEnumerable<T> ResolveMultiple<T>() => _kernel.GetAll<T>();
+        public IInteractor<TUseCase, TOutputPort> ResolveInteractor<TUseCase, TOutputPort>(TUseCase useCase) where TUseCase : IUseCase<TOutputPort>
+        {
+            return Resolve<IInteractor<TUseCase, TOutputPort>>();
+        }
     }
 }
