@@ -14,8 +14,6 @@ namespace InteractorHub.Tests.Resolvers.Ninject
     [TestFixture]
     public class NinjectTests
     {
-
-        private IKernel _kernel;
         private IInteractorHub _interactorHub;
         private IInteractor<MockUseCase, IMockOutputPort> _useCaseInteractor;
 
@@ -26,7 +24,7 @@ namespace InteractorHub.Tests.Resolvers.Ninject
         public void Setup()
         {
 
-            _kernel = new StandardKernel();
+            var kernelConfig = new KernelConfiguration();
             _useCaseInteractor = Substitute.For<IInteractor<MockUseCase, IMockOutputPort>>();
 
             _middleware1 = Substitute.For<IMiddleware<MockUseCase, IMockOutputPort>>();
@@ -47,16 +45,16 @@ namespace InteractorHub.Tests.Resolvers.Ninject
                 .ReturnsForAnyArgs(x => new UseCaseResult(true))
                 .AndDoes(x => x.Arg<Func<MockUseCase, Task<UseCaseResult>>>().Invoke(x.Arg<MockUseCase>()));
 
-            _kernel.Bind<IMiddleware<MockUseCase, IMockOutputPort>>()
+            kernelConfig.Bind<IMiddleware<MockUseCase, IMockOutputPort>>()
                 .ToMethod(context => _middleware1);
 
-            _kernel.Bind<IMiddleware<MockUseCase, IMockOutputPort>>()
+            kernelConfig.Bind<IMiddleware<MockUseCase, IMockOutputPort>>()
                 .ToMethod(context => _middleware2);
 
-            _kernel.Bind<IInteractor<MockUseCase, IMockOutputPort>>()
+            kernelConfig.Bind<IInteractor<MockUseCase, IMockOutputPort>>()
                 .ToMethod(context => _useCaseInteractor);
 
-            _interactorHub = new Hub(new NinjectResolver(_kernel));
+            _interactorHub = new Hub(new NinjectResolver(kernelConfig.BuildReadonlyKernel()));
         }
 
         [Test]
