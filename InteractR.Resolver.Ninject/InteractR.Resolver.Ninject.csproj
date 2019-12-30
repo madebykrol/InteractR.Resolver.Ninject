@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <PackageProjectUrl>https://github.com/madebykrol/InteractR.Resolver.Ninject</PackageProjectUrl>
+    <Authors>Kristoffer Olsson</Authors>
+    <Company>Kristoffer Olsson</Company>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InteractR" Version="1.0.0" />
+    <PackageReference Include="InteractR" Version="2.0.0" />
     <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
   </ItemGroup>
 
