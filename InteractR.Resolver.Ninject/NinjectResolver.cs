@@ -27,5 +27,10 @@ namespace InteractorHub.Resolvers.Ninject
         {
             return _kernel.GetAll<IMiddleware<TUseCase, TOutputPort>>().ToList();
         }
+
+        public IReadOnlyList<IMiddleware> ResolveGlobalMiddleware()
+        {
+            return _kernel.GetAll<IMiddleware>().ToList();
+        }
     }
 }
