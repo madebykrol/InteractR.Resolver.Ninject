@@ -4,12 +4,14 @@ using System.Linq;
 using InteractR.Interactor;
 using InteractR.Resolver;
 using Ninject;
+using Ninject.Activation;
 
 namespace InteractorHub.Resolvers.Ninject
 {
     public class NinjectResolver : IResolver
     {
         private readonly IReadOnlyKernel _kernel;
+        private readonly IContext _context;
 
         public NinjectResolver(IReadOnlyKernel kernel)
         {

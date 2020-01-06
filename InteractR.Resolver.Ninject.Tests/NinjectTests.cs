@@ -5,6 +5,7 @@ using InteractorHub.Resolvers.Ninject;
 using InteractR;
 using InteractR.Interactor;
 using InteractR.Resolver.AutoFac.Tests.Mocks;
+using InteractR.Resolver.Ninject;
 using Ninject;
 using NSubstitute;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace InteractorHub.Tests.Resolvers.Ninject
         public void Setup()
         {
 
-            var kernelConfig = new KernelConfiguration();
+            var kernelConfig = new KernelConfiguration(new ResolverModule());
             _useCaseInteractor = Substitute.For<IInteractor<MockUseCase, IMockOutputPort>>();
 
             _globalMiddleware = Substitute.For<IMiddleware>();
@@ -67,7 +68,8 @@ namespace InteractorHub.Tests.Resolvers.Ninject
             kernelConfig.Bind<IMiddleware>()
                 .ToMethod(context => _globalMiddleware);
 
-            _interactorHub = new Hub(new NinjectResolver(kernelConfig.BuildReadonlyKernel()));
+            var kernel = kernelConfig.BuildReadonlyKernel();
+            _interactorHub = kernel.Get<IInteractorHub>();
         }
 
         [Test]
